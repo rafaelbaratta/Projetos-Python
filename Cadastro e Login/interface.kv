@@ -1,0 +1,245 @@
+<CreateAccountWindow>:
+    name: "create"
+
+    username: username
+    email: email
+    password: password
+    repeat_password: repeat_password
+
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        cols:1
+
+        FloatLayout:
+            size: root.width, root.height
+
+            Label:
+                text: "Criar uma Conta"
+                size_hint: 0.8, 0.15
+                pos_hint: {'x': 0.1, "top": 1}
+                font_size: 40
+            
+            Label:
+                text: "Nome: "
+                size_hint: 0.5, 0.10
+                pos_hint: {'x': 0, "top": 0.85}
+                font_size: 30
+            
+            TextInput:
+                background_color: 0.8, 0.8, 0.8, 1
+                size_hint: 0.4, 0.10
+                pos_hint: {'x': 0.5, "top": 0.85}
+                id: username
+                multiline: False
+                font_size: 30
+
+            Label:
+                text: "E-mail: "
+                size_hint: 0.5, 0.10
+                pos_hint: {'x': 0, "top": 0.85 - 0.14}
+                font_size: 30
+            
+            TextInput:
+                background_color: 0.8, 0.8, 0.8, 1
+                size_hint: 0.4, 0.10
+                pos_hint: {'x': 0.5, "top": 0.85 - 0.14}
+                id: email
+                multiline: False
+                font_size: 30
+
+            Label:
+                text: "Senha: "
+                size_hint: 0.5, 0.10
+                pos_hint: {'x': 0, "top": 0.85 - 0.14 * 2}
+                font_size: 30
+            
+            TextInput:
+                background_color: 0.8, 0.8, 0.8, 1
+                size_hint: 0.4, 0.10
+                pos_hint: {'x': 0.5, "top": 0.85 - 0.14 * 2}
+                id: password
+                multiline: False
+                font_size: 30
+            
+            Label:
+                text: "Repita sua Senha: "
+                size_hint: 0.5, 0.10
+                pos_hint: {'x': 0, "top": 0.85 - 0.14 * 3}
+                font_size: 30
+            
+            TextInput:
+                background_color: 0.8, 0.8, 0.8, 1
+                size_hint: 0.4, 0.10
+                pos_hint: {'x': 0.5, "top": 0.85 - 0.14 * 3}
+                id: repeat_password
+                multiline: False
+                font_size: 30
+            
+        Button:
+            background_color: 0.1, 0.1, 0.1, 1
+            size_hint: 0.7, 0.10
+            pos_hint: {'x': 0.15, "top": 0.85 - 0.14 * 4}
+            font_size: 30
+            text: "Já possui uma conta? Logar"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.login()
+            
+        Button:
+            background_color: 0.1, 0.1, 0.1, 1
+            size_hint: 0.7, 0.10
+            pos_hint: {'x': 0.15, "top": 0.85 - 0.14 * 5}
+            font_size: 30
+            text: "Cadastrar-se"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.submit()
+
+# ======================================================================
+
+<LoginWindow>:
+    name: "login"
+
+    email: email
+    password: password
+
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    FloatLayout:
+
+        Label:
+            text: "Entrar no Sistema"
+            size_hint: 0.8, 0.15
+            pos_hint: {'x': 0.1, "top": 1}
+            font_size: 40
+    
+        Label:
+            text: "E-mail: "
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0, "top": 0.85 - 0.14}
+            font_size: 30
+            
+        TextInput:
+            background_color: 0.8, 0.8, 0.8, 1
+            size_hint: 0.4, 0.10
+            pos_hint: {'x': 0.5, "top": 0.85 - 0.14}
+            id: email
+            multiline: False
+            font_size: 30
+
+        Label:
+            text: "Senha: "
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0, "top": 0.85 - 0.14 * 2}
+            font_size: 30
+        
+        TextInput:
+            background_color: 0.8, 0.8, 0.8, 1
+            size_hint: 0.4, 0.10
+            pos_hint: {'x': 0.5, "top": 0.85 - 0.14 * 2}
+            id: password
+            multiline: False
+            font_size: 30
+
+        Button:
+            background_color: 0.1, 0.1, 0.1, 1
+            size_hint: 0.7, 0.10
+            pos_hint: {'x': 0.15, "top": 0.85 - 0.14 * 4}
+            font_size: 30
+            text: "Logar"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.login_button()
+            
+        Button:
+            background_color: 0.1, 0.1, 0.1, 1
+            size_hint: 0.7, 0.10
+            pos_hint: {'x': 0.15, "top": 0.85 - 0.14 * 5}
+            font_size: 30
+            text: "Não possui conta? Cadastre-se"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.create_button()
+
+# ======================================================================
+
+<MainWindow>:
+    name: "main"
+
+    username: username
+    email: email
+    created: created
+
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    FloatLayout:
+        Label:
+            text: "Informações do Usuário"
+            size_hint: 0.8, 0.15
+            pos_hint: {'x': 0.1, "top": 1}
+            font_size: 40
+    
+        Label:
+            text: "Nome do usuário: "
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0, "top": 0.85 - 0.14}
+            font_size: 30
+        
+        Label:
+            text: "E-mail do usuário: "
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0, "top": 0.85 - 0.14 * 2}
+            font_size: 30
+        
+        Label:
+            text: "Conta criada em: "
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0, "top": 0.85 - 0.14 * 3}
+            font_size: 30
+        
+        Label:
+            id: username
+            text: ""
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0.5, "top": 0.85 - 0.14}
+            font_size: 30
+        
+        Label:
+            id: email
+            text: ""
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0.5, "top": 0.85 - 0.14 * 2}
+            font_size: 30
+        
+        Label:
+            id: created
+            text: ""
+            size_hint: 0.5, 0.10
+            pos_hint: {'x': 0.5, "top": 0.85 - 0.14 * 3}
+            font_size: 30
+        
+        Button:
+            background_color: 0.1, 0.1, 0.1, 1
+            size_hint: 0.7, 0.10
+            pos_hint: {'x': 0.15, "top": 0.85 - 0.14 * 5}
+            font_size: 30
+            text: "Sair"
+            on_release:
+                root.manager.transition.direction = "down"
+                app.root.current = "login"

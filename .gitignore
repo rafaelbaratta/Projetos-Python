@@ -1,9 +1,2 @@
-/Calculadora/Include
-/Calculadora/Lib
-/Calculadora/Scripts
-/Calculadora/pyvenv.cfg
-/Cadastro e Login/Include
-/Cadastro e Login/Lib
-/Cadastro e Login/Scripts
-/Cadastro e Login/pyvenv.cfg
-/Cadastro e Login/__pycache__
+/Calculadora/.venv
+/Cadastro e Login/.venv

@@ -1,4 +1,2 @@
-/Calculadora/.venv
-/Cadastro e Login/.venv
-/CRUD em Banco de Dados/.venv
-/CRUD em Banco de Dados/__pycache__
+*.venv
+*__pycache__

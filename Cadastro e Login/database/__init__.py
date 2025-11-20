@@ -1,2 +1,2 @@
-from core import Core
-from database import Database
+from .database import Database
+from .core import Core

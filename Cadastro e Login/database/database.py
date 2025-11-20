@@ -1,16 +1,17 @@
 import sqlite3 as sql
 from tkinter import messagebox
 
+
 class DatabaseConnection:
     database = "data/users.db"
     connection = None
     cursor = None
     is_connected = False
-    
+
     def __enter__(self):
         self.connect()
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
@@ -22,7 +23,7 @@ class DatabaseConnection:
     def disconnect(self):
         self.connection.close()
         self.is_connected = False
-    
+
     def execute(self, sql, parameters=None):
         if self.is_connected:
             if parameters == None:
@@ -42,33 +43,36 @@ class DatabaseConnection:
             return True
         else:
             return False
-    
+
 
 class Database:
-    
+
     @staticmethod
     def init_database():
         try:
             with DatabaseConnection() as db:
-                db.execute("CREATE TABLE IF NOT EXISTS users " \
-                                "(id INTEGER PRIMARY KEY NOT NULL," \
-                                "email VARCHAR(256) UNIQUE," \
-                                "name VARCHAR(256)," \
-                                "password VARCHAR(100) NOT NULL)")
+                db.execute("CREATE TABLE IF NOT EXISTS users "
+                           "(id INTEGER PRIMARY KEY NOT NULL,"
+                           "email VARCHAR(256) UNIQUE,"
+                           "name VARCHAR(256),"
+                           "password VARCHAR(100) NOT NULL)")
                 db.persist()
         except:
-            messagebox.showerror("Erro!", "Houve um erro ao iniciar o banco de dados")
+            messagebox.showerror(
+                "Erro!", "Houve um erro ao iniciar o banco de dados")
 
     @staticmethod
     def insert_user(email, name, password):
         try:
             with DatabaseConnection() as db:
-                db.execute("INSERT INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
+                db.execute(
+                    "INSERT INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
                 db.persist()
 
         except:
-            messagebox.showerror("Erro!", "Houve um erro ao inserir usuário no banco de dados")
-    
+            messagebox.showerror(
+                "Erro!", "Houve um erro ao inserir usuário no banco de dados")
+
     @staticmethod
     def search_user(email):
         try:
@@ -78,7 +82,8 @@ class Database:
                 return user
 
         except:
-            messagebox.showerror("Erro!", "Houve um erro ao procurar usuário no banco de dados")
+            messagebox.showerror(
+                "Erro!", "Houve um erro ao procurar usuário no banco de dados")
             return []
 
 

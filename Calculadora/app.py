@@ -1,7 +1,8 @@
 import customtkinter as ctk
 
+
 class MainApp(ctk.CTk):
-    
+
     def __init__(self):
         self.operators = ['+', '-', '*', '/']
         self.numbers = [str(i) for i in range(10)]
@@ -46,7 +47,7 @@ class MainApp(ctk.CTk):
             ]
 
             text_color = "dim gray"
-        
+
         return buttons_colors, text_color
 
     def build(self, buttons):
@@ -65,20 +66,23 @@ class MainApp(ctk.CTk):
             self.grid_rowconfigure(i, weight=1)
 
         self.solution = ctk.CTkEntry(self, height=50, font=("Arial", 24))
-        self.solution.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.solution.grid(row=0, column=0, columnspan=4,
+                           padx=10, pady=10, sticky="nsew")
 
         for i, row in enumerate(buttons):
             for j, char in enumerate(row):
                 if char == '=':
-                    button = ctk.CTkButton(self, text=char, width=80, height=60, fg_color=buttons_colors[i][j], text_color=text_color, font=("Arial", 20), command=lambda: self.on_solution_calculate())
+                    button = ctk.CTkButton(self, text=char, width=80, height=60, fg_color=buttons_colors[i][j], text_color=text_color, font=(
+                        "Arial", 20), command=lambda: self.on_solution_calculate())
                 else:
-                    button = ctk.CTkButton(self, text=char, width=80, height=60, fg_color=buttons_colors[i][j], text_color=text_color, font=("Arial", 20), command=lambda ch=char: self.on_button_click(ch))
+                    button = ctk.CTkButton(self, text=char, width=80, height=60, fg_color=buttons_colors[i][j], text_color=text_color, font=(
+                        "Arial", 20), command=lambda ch=char: self.on_button_click(ch))
                 button.grid(row=i+1, column=j, padx=5, pady=5, sticky="nsew")
-                
+
         self.solution.bind("<Key>", self.on_key_press)
 
         self.mainloop()
-        
+
     def clear_solution(self, position=None):
 
         if position is None:
@@ -109,25 +113,26 @@ class MainApp(ctk.CTk):
 
     def cannot_be_number_zero(self):
         return self.last_was_number and self.last_character == '0' and (self.solution.get() == '0' or self.solution.get()[-2] in self.operators + ['('])
-    
+
     def cannot_be_number(self):
         if not self.solution.get():
             return False
-        
+
         cannot_be_zero = False
         if self.last_character == '0':
             cannot_be_zero = self.cannot_be_number_zero()
-        
+
         return (self.last_was_signal and self.last_character == ')') or cannot_be_zero
-    
+
     def cannot_be_operator(self):
         return (self.last_was_operator or self.last_character == '') or (self.last_was_signal and self.last_character == '(') or self.last_character == '.'
-    
+
     def cannot_be_signal(self, char):
         if char == '(':
             return self.last_was_number or (self.last_was_signal and self.last_character == ')')
         elif char == ')':
-            right_parentheses, left_parentheses = self.parenthesis_counter(self.solution.get())
+            right_parentheses, left_parentheses = self.parenthesis_counter(
+                self.solution.get())
             return (self.last_was_operator or self.last_character == '') or (self.last_was_signal and self.last_character == '(') or right_parentheses <= left_parentheses
         elif char == '.':
             for i in range(len(self.solution.get())-1, -1, -1):
@@ -136,7 +141,7 @@ class MainApp(ctk.CTk):
                 if self.solution.get()[i] == '.':
                     return True
             return self.last_was_operator or self.last_character == '' or self.last_was_signal
-    
+
     def on_key_press(self, event):
         if event.char == '\x03':
             self.clipboard_clear()
@@ -149,7 +154,7 @@ class MainApp(ctk.CTk):
                 for char in clipboard_content:
                     self.on_button_click(char)
             return "break"
-    
+
         if event.char == '\r':
             self.on_solution_calculate()
         elif event.char == ',':
@@ -181,7 +186,7 @@ class MainApp(ctk.CTk):
                     return
             else:
                 return
-                    
+
             self.solution.insert(ctk.END, char)
 
             self.last_was_operator = False
@@ -199,7 +204,8 @@ class MainApp(ctk.CTk):
 
     def on_solution_calculate(self):
         expression = self.solution.get()
-        rigth_parentheses, left_parentheses = self.parenthesis_counter(expression)
+        rigth_parentheses, left_parentheses = self.parenthesis_counter(
+            expression)
 
         if rigth_parentheses != left_parentheses:
             return
@@ -215,6 +221,7 @@ class MainApp(ctk.CTk):
             self.solution.insert(0, "Error: Division by zero")
         except:
             return
+
 
 if __name__ == "__main__":
     app = MainApp()

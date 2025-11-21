@@ -11,7 +11,6 @@ class Security:
 
     @staticmethod
     def verify_password(password, password_hashed):
-        cryptography, stored_hash = password_hashed.split('$')
-        computed_hashed = hashlib.sha256(
-            (password + cryptography).encode()).hexdigest()
+        cryptography, stored_hash = password_hashed.split("$")
+        computed_hashed = hashlib.sha256((password + cryptography).encode()).hexdigest()
         return secrets.compare_digest(computed_hashed, stored_hash)

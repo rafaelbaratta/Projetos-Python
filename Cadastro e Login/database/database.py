@@ -51,27 +51,31 @@ class Database:
     def init_database():
         try:
             with DatabaseConnection() as db:
-                db.execute("CREATE TABLE IF NOT EXISTS users "
-                           "(id INTEGER PRIMARY KEY NOT NULL,"
-                           "email VARCHAR(256) UNIQUE,"
-                           "name VARCHAR(256),"
-                           "password VARCHAR(100) NOT NULL)")
+                db.execute(
+                    "CREATE TABLE IF NOT EXISTS users "
+                    "(id INTEGER PRIMARY KEY NOT NULL,"
+                    "email VARCHAR(256) UNIQUE,"
+                    "name VARCHAR(256),"
+                    "password VARCHAR(100) NOT NULL)"
+                )
                 db.persist()
         except:
-            messagebox.showerror(
-                "Erro!", "Houve um erro ao iniciar o banco de dados")
+            messagebox.showerror("Erro!", "Houve um erro ao iniciar o banco de dados")
 
     @staticmethod
     def insert_user(email, name, password):
         try:
             with DatabaseConnection() as db:
                 db.execute(
-                    "INSERT INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
+                    "INSERT INTO users (email, name, password) VALUES (?, ?, ?)",
+                    (email, name, password),
+                )
                 db.persist()
 
         except:
             messagebox.showerror(
-                "Erro!", "Houve um erro ao inserir usuário no banco de dados")
+                "Erro!", "Houve um erro ao inserir usuário no banco de dados"
+            )
 
     @staticmethod
     def search_user(email):
@@ -83,8 +87,34 @@ class Database:
 
         except:
             messagebox.showerror(
-                "Erro!", "Houve um erro ao procurar usuário no banco de dados")
+                "Erro!", "Houve um erro ao procurar usuário no banco de dados"
+            )
             return []
+
+    @staticmethod
+    def update_user(email, name, password):
+        try:
+            with DatabaseConnection() as db:
+                db.execute(
+                    "UPDATE users SET name = ?, password = ? WHERE email = ?",
+                    (name, password, email),
+                )
+                db.persist()
+        except:
+            messagebox.showerror(
+                "Erro!", "Houve um erro ao atualizar usuário no banco de dados"
+            )
+
+    @staticmethod
+    def delete_user(email):
+        try:
+            with DatabaseConnection() as db:
+                db.execute("DELETE FROM users WHERE email = ?", (email,))
+                db.persist()
+        except:
+            messagebox.showerror(
+                "Erro!", "Houve um erro ao excluir usuário do banco de dados"
+            )
 
 
 Database.init_database()

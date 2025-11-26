@@ -1,0 +1,2 @@
+class Historic:
+    pass

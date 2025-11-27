@@ -6,10 +6,21 @@ class StandardInputs:
     MAX_ATTEMPTS = 5
 
     @staticmethod
+    def text_input(message):
+        text = input(message)
+
+        if text == "0":
+            print("\nOperação cancelada!")
+            Utils.pause()
+            return None
+        else:
+            return text
+
+    @staticmethod
     def cpf_input():
         attempts = 0
         while attempts < StandardInputs.MAX_ATTEMPTS:
-            cpf = input(" - Insira seu CPF (apenas números): ")
+            cpf = input(" - Digite seu CPF (apenas números): ")
 
             if cpf == "0":
                 print("\nOperação cancelada!")
@@ -29,20 +40,32 @@ class StandardInputs:
             return None
 
     @staticmethod
-    def text_input(message):
-        text = input(message)
+    def cnpj_input():
+        attempts = 0
+        while attempts < StandardInputs.MAX_ATTEMPTS:
+            cnpj = input(" - Digite o CNPJ (apenas números): ")
 
-        if text == "0":
-            print("\nOperação cancelada!")
+            if cnpj == "0":
+                print("\nOperação cancelada!")
+                Utils.pause()
+                return None
+
+            valid, message = val.cnpj_valid(cnpj)
+
+            if not valid:
+                attempts += 1
+                print(message)
+            else:
+                return cnpj
+        else:
+            print("Muitas tentativas erradas!\nOperação cancelada!")
             Utils.pause()
             return None
-        else:
-            return text
 
     @staticmethod
     def phone_input():
         while True:
-            phone = input(" - Insira seu telefone (apenas números, com DDD): ")
+            phone = input(" - Digite o telefone (apenas números, com DDD): ")
 
             if phone == "0":
                 print("\nOperação cancelada!")
@@ -59,7 +82,7 @@ class StandardInputs:
     @staticmethod
     def email_input():
         while True:
-            email = input(" - Insira seu e-mail: ")
+            email = input(" - Digite o e-mail: ")
 
             if email == "0":
                 print("\nOperação cancelada!")
@@ -76,7 +99,7 @@ class StandardInputs:
     @staticmethod
     def date_input(what):
         while True:
-            date = input(f" - Insira a data de {what}: ")
+            date = input(f" - Digite a data de {what} (DD-MM-AAAA): ")
 
             if date == "0":
                 print("\nOperação cancelada!")

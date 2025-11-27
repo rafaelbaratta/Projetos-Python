@@ -1,16 +1,18 @@
 class Account:
-    def __init__(self, numero_conta, cliente):
-        self.numero = numero_conta
-        self.agencia = "0001"
-        self.cliente = cliente
-        self.saldo = 0
+
+    def __init__(self, account_number, creation_date, agency="0001", balance=0):
+        self.number = account_number
+        self.agency = agency
+        self.balance = balance
+        self.creation_date = creation_date
 
 
 class CheckingAccount(Account):
-    def __init__(self, numero_conta, cliente, limite, limite_saques):
-        super().__init__(numero_conta, cliente)
-        self.limite = limite
-        self.limite_saques = limite_saques
+
+    def __init__(self, account_number, limit, withdrawal_limit):
+        super().__init__(account_number)
+        self.limit = limit
+        self.withdrawal_limit = withdrawal_limit
 
 
 class SavingsAccount(Account):

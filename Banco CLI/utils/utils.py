@@ -5,7 +5,7 @@ class Utils:
 
     HEADER = (
         f"{'=' * 50}\n"
-        f"== {f' AGÊNCIA BANCÁRIA '.center(44, '-')} ==\n"
+        f"== {f' SISTEMA BANCÁRIO '.center(44, '-')} ==\n"
         f"{'=' * 50}\n"
     )
 

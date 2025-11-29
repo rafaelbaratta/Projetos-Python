@@ -12,7 +12,7 @@ class Account:
         self.agency = "0001"
         self._balance = 0
 
-        self.number = self.generate_account_number()
+        self.number = Account.generate_account_number()
         self.opening_date = datetime.now()
 
         self.owner = customer
@@ -49,12 +49,9 @@ class Account:
 
 class CheckingAccount(Account):
 
-    def __init__(
-        self, customer, account_password, app_password, limit=5000, withdrawal_limit=5
-    ):
+    def __init__(self, customer, account_password, app_password, limit=6000):
         super().__init__(customer, account_password, app_password)
         self.limit = limit
-        self.withdrawal_limit = withdrawal_limit
 
     def __str__(self):
         return (
@@ -67,12 +64,9 @@ class CheckingAccount(Account):
 
 class SavingsAccount(Account):
 
-    def __init__(
-        self, customer, account_password, app_password, limit=5000, withdrawal_limit=5
-    ):
+    def __init__(self, customer, account_password, app_password, limit=4000):
         super().__init__(customer, account_password, app_password)
         self.limit = limit
-        self.withdrawal_limit = withdrawal_limit
 
     def __str__(self):
         return (

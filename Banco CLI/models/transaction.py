@@ -29,7 +29,8 @@ class Deposit(Transaction):
         self.register()
 
     def register(self):
-        return super().register()
+        transaction = [datetime.now(), "Depósito", self.amount, "+"]
+        self.account.history.add_transaction(transaction)
 
 
 class Withdrawal(Transaction):
@@ -42,7 +43,8 @@ class Withdrawal(Transaction):
         self.register()
 
     def register(self):
-        return super().register()
+        transaction = [datetime.now(), "Saque", self.amount, "-"]
+        self.account.history.add_transaction(transaction)
 
 
 class Transference(Transaction):
@@ -53,12 +55,16 @@ class Transference(Transaction):
         self.destiny_account = destiny_account
 
     def execute(self):
-        self.origin_account.increase_balance(self.amount)
-        self.destiny_account.decrease_balance(self.amount)
+        self.origin_account.decrease_balance(self.amount)
+        self.destiny_account.increase_balance(self.amount)
         self.register()
 
     def register(self):
-        return super().register()
+        transaction = [datetime.now(), "Transferência", self.amount, "-"]
+        self.origin_account.history.add_transaction(transaction)
+
+        transaction = [datetime.now(), "Transferência", self.amount, "+"]
+        self.destiny_account.history.add_transaction(transaction)
 
 
 class Payment(Transaction):
@@ -71,4 +77,5 @@ class Payment(Transaction):
         self.register()
 
     def register(self):
-        return super().register()
+        transaction = [datetime.now(), "Pagamento", self.amount, "-"]
+        self.account.history.add_transaction(transaction)

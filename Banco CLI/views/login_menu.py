@@ -256,6 +256,11 @@ class LoginMenu:
             "\nDigite '0' para cancelar ou qualquer outra tecla para confirmar o usuário: "
         )
 
+        if confirm == "0":
+            print("\nOperação cancelada!")
+            Utils.pause()
+            return
+
         account_password = si.password_input(
             "\n - Digite uma senha de seis dígitos para transações da conta: ", 6
         )
@@ -268,14 +273,20 @@ class LoginMenu:
         if app_password is None:
             return
 
-        if confirm == "0":
-            print("\nOperação cancelada!")
-            Utils.pause()
-            return
-
         new_account = SavingsAccount(customer, account_password, app_password)
-        account_repo.add_account(new_account)
-        customer.link_account(new_account)
+        print(f"\nConfira os dados da conta\n\n{new_account}")
+
+        confirm = input(
+            "Digite '0' para cancelar a operação ou qualquer outra tecla para confirmar: "
+        )
+
+        if confirm == "0":
+            del new_account
+            print("\nOperação cancelada!")
+        else:
+            account_repo.add_account(new_account)
+            customer.link_account(new_account)
+            print("\nUsuário cadastrado com sucesso!")
 
         Utils.pause()
 
@@ -289,7 +300,7 @@ class LoginMenu:
         else:
             print(f"Total de clientes: {customer_repo.count_customers()}\n")
             for customer in customers:
-                print(f"{customer}")
+                print(f"{customer}\n")
 
         Utils.pause()
 

@@ -196,13 +196,13 @@ class Validations:
         today_date = datetime.today().date()
         days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-        if int(date[6:]) > today_date.year or int(date[6:]) < 1880:
+        if int(date[6:]) > today_date.year or int(date[6:]) < 1500:
             return False, "Ano digitado inválido"
 
         if int(date[3:5]) > 12 or int(date[3:5]) < 1:
             return False, "Mês digitado inválido"
 
-        if int(date[:2]) > days[int(date[:2]) - 1] or int(date[:2]) < 1:
+        if int(date[:2]) > days[int(date[3:5]) - 1] or int(date[:2]) < 1:
             return False, "Dia digitado inválido"
 
         date = datetime.strptime(date, "%d-%m-%Y").date()

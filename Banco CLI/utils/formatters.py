@@ -21,3 +21,7 @@ class Formatters:
     @staticmethod
     def date_format(date):
         return date.strftime("%d/%m/%Y")
+
+    @staticmethod
+    def money_format(amount):
+        return f"R$ {amount:.2f}"

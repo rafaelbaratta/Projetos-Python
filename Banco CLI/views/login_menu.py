@@ -1,4 +1,4 @@
-from models import LegalEntity, NaturalPerson
+from models import CheckingAccount, LegalEntity, NaturalPerson, SavingsAccount
 from utils import StandardInputs as si
 from utils import Utils
 
@@ -148,7 +148,7 @@ class LoginMenu:
             Utils.pause()
 
     @staticmethod
-    def ask_natural_person_os_legal_entity():
+    def ask_natural_person_or_legal_entity():
         opcao = (
             input("Abrir a partir de pessoa física ou jurídica [pf/pj]? ")
             .lower()
@@ -160,11 +160,12 @@ class LoginMenu:
 
         return opcao
 
+    @staticmethod
     def create_checking_account(customer_repo, account_repo):
         Utils.print_header("Abrir Conta Corrente")
         print("Digite 0 a qualquer momento para cancelar a operação\n")
 
-        opcao = LoginMenu.ask_natural_person_os_legal_entity()
+        opcao = LoginMenu.ask_natural_person_or_legal_entity()
 
         if opcao == "pf":
             id = si.cpf_input()
@@ -180,14 +181,14 @@ class LoginMenu:
 
         customer = customer_repo.search_customer_by_id(id)
         if not customer:
-            print("Dado inserido não existe no sistema!")
+            print("\nDado inserido não existe no sistema!")
             Utils.pause()
             return
 
         print(f"\n{customer}")
 
         confirm = input(
-            "Digite '0' para cancelar ou qualquer outra tecla para confirmar o usuário: "
+            "\nDigite '0' para cancelar ou qualquer outra tecla para confirmar o usuário: "
         )
 
         if confirm == "0":
@@ -195,11 +196,87 @@ class LoginMenu:
             Utils.pause()
             return
 
+        account_password = si.password_input(
+            "\n - Digite uma senha de seis dígitos para transações da conta: ", 6
+        )
+        if account_password is None:
+            return
+
+        app_password = si.password_input(
+            " - Digite uma senha de oito dígitos para login no app: ", 8
+        )
+        if app_password is None:
+            return
+
+        new_account = CheckingAccount(customer, account_password, app_password)
+        print(f"\nConfira os dados da conta\n\n{new_account}")
+
+        confirm = input(
+            "Digite '0' para cancelar a operação ou qualquer outra tecla para confirmar: "
+        )
+
+        if confirm == "0":
+            del new_account
+            print("\nOperação cancelada!")
+        else:
+            account_repo.add_account(new_account)
+            customer.link_account(new_account)
+            print("\nUsuário cadastrado com sucesso!")
+
         Utils.pause()
 
+    @staticmethod
     def create_savings_account(customer_repo, account_repo):
         Utils.print_header("Abrir Conta Poupança")
         print("Digite 0 a qualquer momento para cancelar a operação\n")
+
+        opcao = LoginMenu.ask_natural_person_or_legal_entity()
+
+        if opcao == "pf":
+            id = si.cpf_input()
+        elif opcao == "pj":
+            id = si.cnpj_input()
+        else:
+            print("Operação cancelada!")
+            Utils.pause()
+            return
+
+        if id is None:
+            return
+
+        customer = customer_repo.search_customer_by_id(id)
+        if not customer:
+            print("\nDado inserido não existe no sistema!")
+            Utils.pause()
+            return
+
+        print(f"\n{customer}")
+
+        confirm = input(
+            "\nDigite '0' para cancelar ou qualquer outra tecla para confirmar o usuário: "
+        )
+
+        account_password = si.password_input(
+            "\n - Digite uma senha de seis dígitos para transações da conta: ", 6
+        )
+        if account_password is None:
+            return
+
+        app_password = si.password_input(
+            " - Digite uma senha de oito dígitos para login no app: ", 8
+        )
+        if app_password is None:
+            return
+
+        if confirm == "0":
+            print("\nOperação cancelada!")
+            Utils.pause()
+            return
+
+        new_account = SavingsAccount(customer, account_password, app_password)
+        account_repo.add_account(new_account)
+        customer.link_account(new_account)
+
         Utils.pause()
 
     @staticmethod
@@ -212,13 +289,55 @@ class LoginMenu:
         else:
             print(f"Total de clientes: {customer_repo.count_customers()}\n")
             for customer in customers:
-                print(f"{customer}\n")
+                print(f"{customer}")
 
         Utils.pause()
 
+    @staticmethod
     def list_accounts(account_repo):
         Utils.print_header("Listar Contas")
+        accounts = account_repo.list_all_accounts()
+
+        if not accounts:
+            print("Não há contas criadas")
+        else:
+            print(f"Total de contas: {account_repo.count_accounts()}\n")
+            for account in accounts:
+                print(f"{account}")
+
         Utils.pause()
 
-    def login():
+    @staticmethod
+    def login(account_repo):
         Utils.print_header("Entrar no Sistema")
+        print("Digite 0 a qualquer momento para cancelar a operação\n")
+
+        account_number = si.text_input(" - Número da conta: ")
+        if account_number is None:
+            return
+
+        account = account_repo.search_account_by_number(account_number)
+        if not account:
+            print("\nConta não encontrada no sistema!")
+            Utils.pause()
+            return
+
+        print(f"\n{account}")
+
+        attempts = 0
+        while attempts < 5:
+            account_password = si.text_input(" - Senha do aplicativo: ")
+            if account_password is None:
+                return
+
+            if account.app_password == account_password:
+                print("\nLogin feito com sucesso!")
+                Utils.pause()
+                return account
+            else:
+                print("\nSenhas não conferem!")
+                attempts += 1
+        else:
+            print("\nMuitas tentativas erradas!\nOperação cancelada!")
+            Utils.pause()
+            return None

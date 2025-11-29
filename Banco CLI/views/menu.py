@@ -19,8 +19,9 @@ class Menu:
         "            [1] Depósito\n"
         "            [2] Saque\n"
         "            [3] Transferência\n"
-        "            [4] Consultar Saldo\n"
-        "            [5] Verificar Extrato\n"
+        "            [4] Pagamento\n"
+        "            [5] Consultar Saldo\n"
+        "            [6] Verificar Extrato\n"
         "            [0] Desconectar\n\n"
         "== --> "
     )
@@ -41,7 +42,9 @@ class Menu:
                 case "4":
                     LoginMenu.list_accounts(account_repo)
                 case "5":
-                    LoginMenu.login()
+                    user_account = LoginMenu.login(account_repo)
+                    if user_account:
+                        Menu.main_menu(account_repo, user_account)
                 case "0":
                     print("Sistema encerrado!")
                     return
@@ -50,23 +53,26 @@ class Menu:
                     Utils.pause()
 
     @staticmethod
-    def main_menu():
+    def main_menu(account_repo, user_account):
         while True:
             Utils.clean_screen()
+            print(user_account.owner)
             Utils.print_header("Menu Principal")
             opcao = input(Menu.MAIN_MENU).strip()
 
             match opcao:
                 case "1":
-                    MainMenu.deposit()
+                    MainMenu.deposit(user_account)
                 case "2":
-                    MainMenu.withdrawal()
+                    MainMenu.withdrawal(user_account)
                 case "3":
-                    MainMenu.transference()
+                    MainMenu.transference(account_repo, user_account)
                 case "4":
-                    MainMenu.see_balance()
+                    MainMenu.payment(user_account)
                 case "5":
-                    MainMenu.see_statement()
+                    MainMenu.see_balance(user_account)
+                case "6":
+                    MainMenu.see_statement(account_repo, user_account)
                 case "0":
                     print("Sistema encerrado!")
                     return

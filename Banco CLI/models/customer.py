@@ -12,6 +12,9 @@ class Customer(ABC):
         self.phone = phone
         self.accounts = []
 
+    def link_account(self, account):
+        return self.accounts.append(account)
+
     @abstractmethod
     def get_id(self):
         pass

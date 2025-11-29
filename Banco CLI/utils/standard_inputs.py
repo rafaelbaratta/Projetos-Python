@@ -6,8 +6,8 @@ class StandardInputs:
     MAX_ATTEMPTS = 5
 
     @staticmethod
-    def text_input(message):
-        text = input(message)
+    def text_input(message_input):
+        text = input(message_input)
 
         if text == "0":
             print("\nOperação cancelada!")
@@ -112,3 +112,63 @@ class StandardInputs:
                 print(message)
             else:
                 return date
+
+    @staticmethod
+    def password_input(message_input, chars):
+        attempts = 0
+        while attempts < StandardInputs.MAX_ATTEMPTS:
+            password = input(message_input)
+
+            if password == "0":
+                print("\nOperação cancelada!")
+                Utils.pause()
+                return None
+
+            valid, message = val.password_valid(password, chars)
+
+            if not valid:
+                attempts += 1
+                print(message)
+            else:
+                return password
+        else:
+            print("Muitas tentativas erradas!\nOperação cancelada!")
+            Utils.pause()
+            return None
+
+    @staticmethod
+    def money_input(message_input):
+        while True:
+            try:
+                amount = float(input(message_input).replace(",", "."))
+            except ValueError:
+                print("\nDigite apenas números")
+                continue
+
+            if amount == 0:
+                print("\nOperação cancelada!")
+                Utils.pause()
+                return None
+
+            if amount < 0:
+                print("\nValor digitado deve ser positivo!")
+                continue
+
+            return amount
+
+    @staticmethod
+    def bill_code_input():
+        while True:
+            bill_code = input(" - Digite o código de barras do boleto: ")
+
+            if bill_code == "0":
+                print("\nOperação cancelada!")
+                Utils.pause()
+                return None
+
+            valid, message = val.bill_code_valid(bill_code)
+
+            if not valid:
+                print(message)
+            else:
+                return bill_code

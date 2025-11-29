@@ -202,7 +202,7 @@ class Validations:
         if int(date[3:5]) > 12 or int(date[3:5]) < 1:
             return False, "Mês digitado inválido"
 
-        if int(date[:2]) > days[int(date[1]) - 1] or int(date[:2]) < 1:
+        if int(date[:2]) > days[int(date[:2]) - 1] or int(date[:2]) < 1:
             return False, "Dia digitado inválido"
 
         date = datetime.strptime(date, "%d-%m-%Y").date()
@@ -211,5 +211,25 @@ class Validations:
 
         if age < 0:
             return False, "Data digitada é inválida"
+
+        return True, ""
+
+    @staticmethod
+    def password_valid(password, chars):
+        if len(password) != chars:
+            return False, f"Senha deve possuir exatamente {chars} caracteres"
+
+        if not password.isdigit():
+            return False, "Senha deve conter apenas números"
+
+        return True, ""
+
+    @staticmethod
+    def bill_code_valid(bill_code):
+        if len(bill_code) != 47 and len(bill_code) != 48:
+            return False, f"Quantidade inválida de dígitos do código de barras"
+
+        if not bill_code.isdigit():
+            return False, "Código de barras deve conter apenas números"
 
         return True, ""
